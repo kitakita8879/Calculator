@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -153,7 +152,7 @@
             </TableRow>
 
             <TableRow
-                android:id="@+id/table4"
+                android:id="@+id/table_4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center">
@@ -183,7 +182,7 @@
                     android:textSize="24sp" />
 
                 <Button
-                    android:id="@+id/Add"
+                    android:id="@+id/add"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -192,13 +191,13 @@
             </TableRow>
 
             <TableRow
-                android:id="@+id/table5"
+                android:id="@+id/table_5"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center">
 
                 <Button
-                    android:id="@+id/Del"
+                    android:id="@+id/del"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -215,7 +214,7 @@
                     android:textSize="24sp" />
 
                 <Button
-                    android:id="@+id/Dot"
+                    android:id="@+id/dot"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -223,7 +222,7 @@
                     android:textSize="24sp" />
 
                 <Button
-                    android:id="@+id/Equ"
+                    android:id="@+id/equ"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

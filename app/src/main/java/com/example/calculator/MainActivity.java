@@ -38,16 +38,16 @@ public class MainActivity extends AppCompatActivity {
         Button btn7 = findViewById(R.id.btn_7);
         Button btn8 = findViewById(R.id.btn_8);
         Button btn9 = findViewById(R.id.btn_9);
-        Button add = findViewById(R.id.Add);
+        Button add = findViewById(R.id.add);
         Button sub = findViewById(R.id.sub);
         Button mul = findViewById(R.id.mul);
         Button div = findViewById(R.id.div);
-        Button dot = findViewById(R.id.Dot);
+        Button dot = findViewById(R.id.dot);
         Button clear = findViewById(R.id.clear);
         Button lArrow = findViewById(R.id.left_arr);
         Button rArrow = findViewById(R.id.right_arr);
         //Button del = findViewById(R.id.Del);//
-        Button equ = findViewById(R.id.Equ);
+        Button equ = findViewById(R.id.equ);
 
         btn0.setOnClickListener(clickListen);
         btn1.setOnClickListener(clickListen);
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 while (!formula.isEmpty()) {
                     formula.pop();
                 }
-            } else if (id == R.id.Add) {
+            } else if (id == R.id.add) {
                 tmpAns = txtAns.getText().toString() + b.getText().toString();
                 txtAns.setText(tmpAns);
                 tmpNum = txtTmp.getText().toString();
@@ -187,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                     formula.push("Div");
                 }
                 txtTmp.setText("");
-            } else if (id == R.id.Equ) {
+            } else if (id == R.id.equ) {
                 tmpNum = txtTmp.getText().toString();
                 if (!tmpNum.isEmpty()) {
                     formula.push(tmpNum);
