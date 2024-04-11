@@ -2,7 +2,6 @@ package com.example.calculator;
 
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,26 +27,26 @@ public class MainActivity extends AppCompatActivity {
     private void FindView(){
         txtAns = findViewById(R.id.ans);
         txtTmp = findViewById(R.id.tmp);
-        Button btn0 = findViewById(R.id.btn_0);
-        Button btn1 = findViewById(R.id.btn_1);
-        Button btn2 = findViewById(R.id.btn_2);
-        Button btn3 = findViewById(R.id.btn_3);
-        Button btn4 = findViewById(R.id.btn_4);
-        Button btn5 = findViewById(R.id.btn_5);
-        Button btn6 = findViewById(R.id.btn_6);
-        Button btn7 = findViewById(R.id.btn_7);
-        Button btn8 = findViewById(R.id.btn_8);
-        Button btn9 = findViewById(R.id.btn_9);
-        Button add = findViewById(R.id.add);
-        Button sub = findViewById(R.id.sub);
-        Button mul = findViewById(R.id.mul);
-        Button div = findViewById(R.id.div);
-        Button dot = findViewById(R.id.dot);
-        Button clear = findViewById(R.id.clear);
-        Button lArrow = findViewById(R.id.left_arr);
-        Button rArrow = findViewById(R.id.right_arr);
+        TextView btn0 = findViewById(R.id.btn_0);
+        TextView btn1 = findViewById(R.id.btn_1);
+        TextView btn2 = findViewById(R.id.btn_2);
+        TextView btn3 = findViewById(R.id.btn_3);
+        TextView btn4 = findViewById(R.id.btn_4);
+        TextView btn5 = findViewById(R.id.btn_5);
+        TextView btn6 = findViewById(R.id.btn_6);
+        TextView btn7 = findViewById(R.id.btn_7);
+        TextView btn8 = findViewById(R.id.btn_8);
+        TextView btn9 = findViewById(R.id.btn_9);
+        TextView add = findViewById(R.id.add);
+        TextView sub = findViewById(R.id.sub);
+        TextView mul = findViewById(R.id.mul);
+        TextView div = findViewById(R.id.div);
+        TextView dot = findViewById(R.id.dot);
+        TextView clear = findViewById(R.id.clear);
+        TextView lArrow = findViewById(R.id.left_arr);
+        TextView rArrow = findViewById(R.id.right_arr);
         //Button del = findViewById(R.id.Del);//
-        Button equ = findViewById(R.id.equ);
+        TextView equ = findViewById(R.id.equ);
 
         btn0.setOnClickListener(clickListen);
         btn1.setOnClickListener(clickListen);
@@ -70,11 +69,11 @@ public class MainActivity extends AppCompatActivity {
         rArrow.setOnClickListener(clickListen);
     }
 
-    private final Button.OnClickListener clickListen = new Button.OnClickListener(){
+    private final TextView.OnClickListener clickListen = new TextView.OnClickListener(){
 
         @Override
         public void onClick(View v) {
-            Button b = (Button)v;
+            TextView b = (TextView) v;
 
             double num1;
             double num2;

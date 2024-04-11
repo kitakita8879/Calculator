@@ -1,237 +1,341 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guild_line"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/ans"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:gravity="center|end"
+        android:textColor="#000000"
+        android:textSize="40sp"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/guild_line"
+        app:layout_constraintBottom_toTopOf="@id/tmp"
+        app:layout_constraintVertical_bias="0.2"/>
 
-        <TextView
-            android:id="@+id/ans"
-            android:layout_width="match_parent"
-            android:layout_height="88dp"
-            android:gravity="center|end"
-            android:textColor="#000000"
-            android:textSize="36sp"
-            android:visibility="visible" />
+    <TextView
+        android:id="@+id/tmp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@id/ans"
+        app:layout_constraintBottom_toTopOf="@id/guild_line_2"/>
 
-        <TextView
-            android:id="@+id/tmp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="invisible" />
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guild_line_2"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.3" android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/clear"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/c"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/left_arr"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/guild_line_2"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@id/btn_7"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/left_arr"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/LeftArr"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/right_arr"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/clear"
+        app:layout_constraintTop_toBottomOf="@id/guild_line_2"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@id/btn_8"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/right_arr"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/RightArr"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/div"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/left_arr"
+        app:layout_constraintTop_toBottomOf="@id/guild_line_2"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@id/btn_9"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/div"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/div"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/right_arr"
+        app:layout_constraintTop_toBottomOf="@id/guild_line_2"
+        app:layout_constraintBottom_toTopOf="@id/mul"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/btn_7"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/_7"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/left_arr"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/clear"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@id/btn_4"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/btn_8"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/_8"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@id/btn_7"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@id/btn_9"
+        app:layout_constraintTop_toBottomOf="@id/left_arr"
+        app:layout_constraintBottom_toTopOf="@id/btn_5"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/btn_9"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/_9"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@id/btn_8"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@id/mul"
+        app:layout_constraintTop_toBottomOf="@id/right_arr"
+        app:layout_constraintBottom_toTopOf="@id/btn_6"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/mul"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/mul"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@id/btn_9"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/div"
+        app:layout_constraintBottom_toTopOf="@id/sub"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/btn_4"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/_4"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btn_5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/btn_7"
+        app:layout_constraintBottom_toTopOf="@id/btn_1"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/btn_5"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/_5"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@id/btn_4"
+        app:layout_constraintEnd_toStartOf="@id/btn_6"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/btn_8"
+        app:layout_constraintBottom_toTopOf="@id/btn_2"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/btn_6"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/_6"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@id/btn_5"
+        app:layout_constraintEnd_toStartOf="@id/sub"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/btn_9"
+        app:layout_constraintBottom_toTopOf="@id/btn_3"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
+
+    <TextView
+        android:id="@+id/sub"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/sub"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@id/btn_6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/mul"
+        app:layout_constraintBottom_toTopOf="@id/add"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
 
 
-        <TableLayout
-            android:id="@+id/btn_table"
-            android:layout_width="411dp"
-            android:layout_height="566dp"
-            android:layout_marginTop="77dp">
+    <TextView
+        android:id="@+id/btn_1"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/_1"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@id/btn_2"
+        app:layout_constraintTop_toBottomOf="@id/btn_4"
+        app:layout_constraintBottom_toTopOf="@id/btn_0"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
 
-            <TableRow
-                android:id="@+id/table_1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
+    <TextView
+        android:id="@+id/btn_2"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/_2"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@id/btn_1"
+        app:layout_constraintEnd_toStartOf="@id/btn_3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/btn_5"
+        app:layout_constraintBottom_toTopOf="@id/btn_0"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
 
-                <Button
-                    android:id="@+id/clear"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="@string/c"
-                    android:textSize="24sp" />
+    <TextView
+        android:id="@+id/btn_3"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/_3"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@id/btn_2"
+        app:layout_constraintEnd_toStartOf="@id/add"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/btn_6"
+        app:layout_constraintBottom_toTopOf="@id/dot"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
 
-                <Button
-                    android:id="@+id/left_arr"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/LeftArr"
-                    android:textSize="24sp" />
+    <TextView
+        android:id="@+id/add"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/add"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toTopOf="@id/equ"
+        app:layout_constraintTop_toBottomOf="@id/sub"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
 
-                <Button
-                    android:id="@+id/right_arr"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/RightArr"
-                    android:textSize="24sp" />
+    <TextView
+        android:id="@+id/btn_0"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/_0"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@id/btn_1"
+        app:layout_constraintEnd_toStartOf="@id/dot"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/btn_2"
+        app:layout_constraintBottom_toBottomOf="@id/guild_line_3"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
 
-                <Button
-                    android:id="@+id/div"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/div"
-                    android:textSize="24sp" />
-            </TableRow>
+    <TextView
+        android:id="@+id/dot"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/dot"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@id/btn_0"
+        app:layout_constraintEnd_toStartOf="@id/equ"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/btn_3"
+        app:layout_constraintBottom_toBottomOf="@id/guild_line_3"
+        app:layout_constraintVertical_bias="0.5"
+        android:gravity="center"/>
 
-            <TableRow
-                android:id="@+id/table_2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
+    <TextView
+        android:id="@+id/equ"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:text="@string/equ"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@id/dot"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/guild_line_3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@id/add"
+        android:gravity="center"/>
 
-                <Button
-                    android:id="@+id/btn_7"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_7"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/btn_8"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_8"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/btn_9"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_9"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/mul"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/mul"
-                    android:textSize="24sp" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/table_3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <Button
-                    android:id="@+id/btn_4"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_4"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/btn_5"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_5"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/btn_6"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_6"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/sub"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sub"
-                    android:textSize="24sp" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/table_4"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <Button
-                    android:id="@+id/btn_1"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_1"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/btn_2"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_2"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/btn_3"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_3"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/add"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/add"
-                    android:textSize="24sp" />
-            </TableRow>
-
-            <TableRow
-                android:id="@+id/table_5"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center">
-
-                <Button
-                    android:id="@+id/del"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/del"
-                    android:textSize="24sp"
-                    android:visibility="invisible" />
-
-                <Button
-                    android:id="@+id/btn_0"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/_0"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/dot"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/dot"
-                    android:textSize="24sp" />
-
-                <Button
-                    android:id="@+id/equ"
-                    style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/equ"
-                    android:textSize="24sp" />
-            </TableRow>
-
-        </TableLayout>
-
-    </LinearLayout>
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guild_line_3"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="1"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8"
+        android:gravity="center"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
