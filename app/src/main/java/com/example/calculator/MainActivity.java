@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
     private Double ansNum = 0.0;
     private Double ansView = 0.0;
     private final Stack<String> formula = new Stack<>();
+    private boolean isDot = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
         TextView clear = findViewById(R.id.clear);
         TextView lArrow = findViewById(R.id.left_arr);
         TextView rArrow = findViewById(R.id.right_arr);
-        //Button del = findViewById(R.id.Del);//
         TextView equ = findViewById(R.id.equ);
 
         btn0.setOnClickListener(clickListen);
@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
                     formula.push("Add");
                 }
                 txtTmp.setText("");
+                isDot = false;
             } else if (id == R.id.sub) {
                 tmpAns = txtAns.getText().toString() + b.getText().toString();
                 txtAns.setText(tmpAns);
@@ -136,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                     formula.push("Sub");
                 }
                 txtTmp.setText("");
+                isDot = false;
             } else if (id == R.id.mul) {
                 tmpAns = txtAns.getText().toString() + b.getText().toString();
                 txtAns.setText(tmpAns);
@@ -161,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
                     formula.push("Mul");
                 }
                 txtTmp.setText("");
+                isDot = false;
             } else if (id == R.id.div) {
                 tmpAns = txtAns.getText().toString() + b.getText().toString();
                 txtAns.setText(tmpAns);
@@ -186,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
                     formula.push("Div");
                 }
                 txtTmp.setText("");
+                isDot = false;
             } else if (id == R.id.equ) {
                 tmpNum = txtTmp.getText().toString();
                 if (!tmpNum.isEmpty()) {
@@ -221,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
                     txtAns.setText(String.format(ansView.toString()));
                 }
                 txtTmp.setText("");
+                isDot = false;
             } else if (id == R.id.left_arr) {
                 int i = ansView.toString().length() - ansView.toString().indexOf('.') - 1;
                 if (i == 2) {
@@ -245,6 +250,20 @@ public class MainActivity extends AppCompatActivity {
                     ansView = Math.round(ansNum * 10000) * 0.0001;
                 }
                 txtAns.setText(String.format(ansView.toString()));
+            } else if (id == R.id.dot){
+                if (!isDot){
+                    if(txtTmp.getText().toString().isEmpty()){
+                        txtTmp.setText(("0."));
+                        tmpAns = txtAns.getText().toString() + txtTmp.getText().toString();
+                        txtAns.setText(tmpAns);
+                    }else{
+                        tmpNum = txtTmp.getText() + b.getText().toString();
+                        txtTmp.setText((tmpNum));
+                        tmpAns = txtAns.getText().toString() + b.getText().toString();
+                        txtAns.setText(tmpAns);
+                    }
+                }
+                isDot = true;
             } else {
                 if (txtTmp.getText().toString().isEmpty()) {
                     txtTmp.setText(b.getText().toString());
