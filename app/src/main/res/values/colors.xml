@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="calculator_background">#FFF5F2EA</color>
+    <color name="calculator_surface">#FFFFFFFF</color>
+    <color name="calculator_surface_variant">#FFE6DED0</color>
+    <color name="calculator_primary">#FF155EEF</color>
+    <color name="calculator_on_primary">#FFFFFFFF</color>
+    <color name="calculator_on_surface">#FF1E1B16</color>
+    <color name="calculator_outline">#FF8B7D6B</color>
+    <color name="calculator_operator">#FFDCE8FF</color>
+    <color name="calculator_function">#FFFBE2C5</color>
 </resources>

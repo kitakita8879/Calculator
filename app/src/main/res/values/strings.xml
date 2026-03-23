@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">Calculator</string>
-    <string name="c">C</string>
-    <string name="LeftArr">←</string>
-    <string name="RightArr">→</string>
+    <string name="clear">C</string>
+    <string name="delete">DEL</string>
+    <string name="left_arrow">←</string>
+    <string name="right_arrow">→</string>
     <string name="div">÷</string>
     <string name="_7">7</string>
     <string name="_8">8</string>
@@ -16,9 +17,21 @@
     <string name="_2">2</string>
     <string name="_3">3</string>
     <string name="add">+</string>
-    <string name="del">del</string>
     <string name="_0">0</string>
     <string name="dot">.</string>
     <string name="equ">=</string>
-    <string name="button">Button</string>
+    <string name="expression_label">算式</string>
+    <string name="result_label">結果</string>
+    <string name="button_clear">清除</string>
+    <string name="button_delete">刪除</string>
+    <string name="button_precision_down">減少小數位</string>
+    <string name="button_precision_up">增加小數位</string>
+    <string name="button_divide">除法</string>
+    <string name="button_multiply">乘法</string>
+    <string name="button_subtract">減法</string>
+    <string name="button_add">加法</string>
+    <string name="button_decimal">小數點</string>
+    <string name="button_equals">等於</string>
+    <string name="calculator_ready">0</string>
+    <string name="calculator_error_divide_by_zero">無法除以 0</string>
 </resources>
