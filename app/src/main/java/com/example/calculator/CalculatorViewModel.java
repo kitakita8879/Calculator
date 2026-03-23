@@ -19,35 +19,35 @@ public final class CalculatorViewModel extends ViewModel {
     }
 
     public void onDigitClick(int digit) {
-        syncState(mEngine.dispatch(CalculatorAction.digit(digit)));
+        syncState(mEngine.applyAction(CalculatorAction.digit(digit)));
     }
 
     public void onDecimalClick() {
-        syncState(mEngine.dispatch(CalculatorAction.decimal()));
+        syncState(mEngine.applyAction(CalculatorAction.decimal()));
     }
 
     public void onOperatorClick(@NonNull Operator operator) {
-        syncState(mEngine.dispatch(CalculatorAction.operator(operator)));
+        syncState(mEngine.applyAction(CalculatorAction.operator(operator)));
     }
 
     public void onClearClick() {
-        syncState(mEngine.dispatch(CalculatorAction.clear()));
+        syncState(mEngine.applyAction(CalculatorAction.clear()));
     }
 
     public void onDeleteClick() {
-        syncState(mEngine.dispatch(CalculatorAction.delete()));
+        syncState(mEngine.applyAction(CalculatorAction.delete()));
     }
 
     public void onEqualsClick() {
-        syncState(mEngine.dispatch(CalculatorAction.equalsAction()));
+        syncState(mEngine.applyAction(CalculatorAction.equalsAction()));
     }
 
     public void onPrecisionDownClick() {
-        syncState(mEngine.dispatch(CalculatorAction.precisionDown()));
+        syncState(mEngine.applyAction(CalculatorAction.precisionDown()));
     }
 
     public void onPrecisionUpClick() {
-        syncState(mEngine.dispatch(CalculatorAction.precisionUp()));
+        syncState(mEngine.applyAction(CalculatorAction.precisionUp()));
     }
 
     @NonNull

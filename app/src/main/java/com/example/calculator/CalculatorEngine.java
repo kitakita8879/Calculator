@@ -24,7 +24,7 @@ public final class CalculatorEngine {
     private int mResultScale = DEFAULT_RESULT_SCALE;
 
     @NonNull
-    public CalculatorUiState dispatch(@NonNull CalculatorAction action) {
+    public CalculatorUiState applyAction(@NonNull CalculatorAction action) {
         switch (action.getType()) {
             case DIGIT:
                 String digit = action.getDigit();
@@ -38,7 +38,7 @@ public final class CalculatorEngine {
             case OPERATOR:
                 Operator operator = action.getOperator();
                 if (operator != null) {
-                    applyOperator(operator);
+                    inputOperator(operator);
                 }
                 break;
             case CLEAR:
@@ -48,7 +48,7 @@ public final class CalculatorEngine {
                 delete();
                 break;
             case EQUALS:
-                evaluate();
+                evaluateExpression();
                 break;
             case PRECISION_DOWN:
                 adjustPrecision(false);
@@ -102,61 +102,51 @@ public final class CalculatorEngine {
             return;
         }
 
-        if (mHasError || shouldStartNewExpression()) {
-            clear();
-        }
-
+        prepareForFreshInput();
         mCurrentInput += digit;
-        mExpressionText += digit;
         mHasEvaluatedResult = false;
+        refreshExpressionText();
     }
 
     private void appendDecimal() {
-        if (mHasError || shouldStartNewExpression()) {
-            clear();
-        }
-
+        prepareForFreshInput();
         if (mCurrentInput.contains(".")) {
             return;
         }
 
         if (mCurrentInput.isEmpty()) {
             mCurrentInput = "0.";
-            mExpressionText += "0.";
         } else {
             mCurrentInput += ".";
-            mExpressionText += ".";
         }
 
         mHasEvaluatedResult = false;
+        refreshExpressionText();
     }
 
-    private void applyOperator(@NonNull Operator operator) {
+    private void inputOperator(@NonNull Operator operator) {
         if (mHasError) {
             return;
         }
 
-        if (shouldUseLastResultAsOperand()) {
-            mOperands.add(mLastResult);
-            mExpressionText = stripTrailingZeros(mLastResult);
-            mHasEvaluatedResult = false;
-        }
+        addReadyResultToOperands();
 
-        if (mCurrentInput.isEmpty()) {
+        if (!addCurrentToOperands()) {
             if (mOperators.isEmpty() && mOperands.isEmpty()) {
                 return;
             }
-            if (!mOperators.isEmpty() && mOperands.size() == mOperators.size()) {
+            if (endsWithOperator()) {
                 mOperators.set(mOperators.size() - 1, operator);
-                mExpressionText = replaceTrailingOperator(mExpressionText, operator.getSymbol());
+                refreshExpressionText();
+                return;
             }
+            mOperators.add(operator);
+            refreshExpressionText();
             return;
         }
 
-        mOperands.add(new BigDecimal(mCurrentInput));
-        mCurrentInput = "";
         mOperators.add(operator);
-        mExpressionText += " " + operator.getSymbol() + " ";
+        refreshExpressionText();
     }
 
     private void delete() {
@@ -172,32 +162,25 @@ public final class CalculatorEngine {
 
         if (!mCurrentInput.isEmpty()) {
             mCurrentInput = mCurrentInput.substring(0, mCurrentInput.length() - 1);
-            mExpressionText = trimLastCharacter(mExpressionText);
+            refreshExpressionText();
             return;
         }
 
-        if (!mOperators.isEmpty() && mOperands.size() == mOperators.size()) {
+        if (endsWithOperator()) {
             mOperators.remove(mOperators.size() - 1);
             BigDecimal restoredOperand = mOperands.remove(mOperands.size() - 1);
             mCurrentInput = stripTrailingZeros(restoredOperand);
-            mExpressionText = mCurrentInput;
+            refreshExpressionText();
         }
     }
 
-    private void evaluate() {
-        if (mHasError || (mCurrentInput.isEmpty() && mOperands.isEmpty())) {
+    private void evaluateExpression() {
+        if (!canEvaluate()) {
             return;
         }
 
-        if (!mCurrentInput.isEmpty()) {
-            mOperands.add(new BigDecimal(mCurrentInput));
-            mCurrentInput = "";
-        }
-
-        while (mOperators.size() >= mOperands.size() && !mOperators.isEmpty()) {
-            mOperators.remove(mOperators.size() - 1);
-            mExpressionText = trimTrailingOperator(mExpressionText);
-        }
+        addCurrentToOperands();
+        removeExtraOperators();
 
         if (mOperands.isEmpty()) {
             return;
@@ -206,22 +189,14 @@ public final class CalculatorEngine {
         String evaluatedExpression = mExpressionText;
 
         try {
-            BigDecimal result = evaluateWithPrecedence();
-            mOperands.clear();
-            mOperators.clear();
-            mLastResult = result;
-            mResultScale = DEFAULT_RESULT_SCALE;
-            mHasEvaluatedResult = true;
-            mExpressionText = evaluatedExpression + " =";
+            BigDecimal result = computeWithPrecedence();
+            applyEvaluationResult(result, evaluatedExpression);
         } catch (ArithmeticException exception) {
-            mOperands.clear();
-            mOperators.clear();
-            mCurrentInput = "";
-            mHasError = true;
+            enterErrorState();
         }
     }
 
-    private BigDecimal evaluateWithPrecedence() {
+    private BigDecimal computeWithPrecedence() {
         List<BigDecimal> collapsedOperands = new ArrayList<>();
         List<Operator> collapsedOperators = new ArrayList<>();
         collapsedOperands.add(mOperands.get(0));
@@ -232,7 +207,7 @@ public final class CalculatorEngine {
             if (operator == Operator.MULTIPLY || operator == Operator.DIVIDE) {
                 BigDecimal leftOperand = collapsedOperands.remove(
                         collapsedOperands.size() - 1);
-                collapsedOperands.add(applyBinaryOperator(leftOperand, nextOperand, operator));
+                collapsedOperands.add(computeBinary(leftOperand, nextOperand, operator));
             } else {
                 collapsedOperators.add(operator);
                 collapsedOperands.add(nextOperand);
@@ -241,15 +216,15 @@ public final class CalculatorEngine {
 
         BigDecimal result = collapsedOperands.get(0);
         for (int index = 0; index < collapsedOperators.size(); index++) {
-            result = applyBinaryOperator(result,
+            result = computeBinary(result,
                     collapsedOperands.get(index + 1), collapsedOperators.get(index));
         }
 
         return result;
     }
 
-    private BigDecimal applyBinaryOperator(BigDecimal left, BigDecimal right,
-                                           @NonNull Operator operator) {
+    private BigDecimal computeBinary(BigDecimal left, BigDecimal right,
+                                     @NonNull Operator operator) {
         return switch (operator) {
             case ADD -> left.add(right);
             case SUBTRACT -> left.subtract(right);
@@ -275,24 +250,70 @@ public final class CalculatorEngine {
         }
     }
 
-    private boolean shouldStartNewExpression() {
+    private void prepareForFreshInput() {
+        if (mHasError || hasReadyResult()) {
+            clear();
+        }
+    }
+
+    private boolean hasReadyResult() {
         return mHasEvaluatedResult && mOperands.isEmpty()
                 && mOperators.isEmpty() && mCurrentInput.isEmpty();
     }
 
-    private boolean shouldUseLastResultAsOperand() {
-        return mHasEvaluatedResult && mOperands.isEmpty()
-                && mOperators.isEmpty() && mCurrentInput.isEmpty();
+    private boolean addCurrentToOperands() {
+        if (mCurrentInput.isEmpty()) {
+            return false;
+        }
+
+        mOperands.add(new BigDecimal(mCurrentInput));
+        mCurrentInput = "";
+        return true;
+    }
+
+    private void addReadyResultToOperands() {
+        if (!hasReadyResult()) {
+            return;
+        }
+
+        mOperands.add(mLastResult);
+        mHasEvaluatedResult = false;
+    }
+
+    private boolean endsWithOperator() {
+        return !mOperators.isEmpty() && mOperands.size() == mOperators.size();
+    }
+
+    private boolean canEvaluate() {
+        return !mHasError && (!mCurrentInput.isEmpty() || !mOperands.isEmpty());
+    }
+
+    private void removeExtraOperators() {
+        while (mOperators.size() >= mOperands.size() && !mOperators.isEmpty()) {
+            mOperators.remove(mOperators.size() - 1);
+            mExpressionText = trimTrailingOperatorText(mExpressionText);
+        }
+    }
+
+    private void applyEvaluationResult(@NonNull BigDecimal result,
+                                       @NonNull String evaluatedExpression) {
+        mOperands.clear();
+        mOperators.clear();
+        mLastResult = result;
+        mResultScale = DEFAULT_RESULT_SCALE;
+        mHasEvaluatedResult = true;
+        mExpressionText = evaluatedExpression + " =";
+    }
+
+    private void enterErrorState() {
+        mOperands.clear();
+        mOperators.clear();
+        mCurrentInput = "";
+        mHasError = true;
     }
 
     @NonNull
-    private String replaceTrailingOperator(String source, @NonNull String operatorSymbol) {
-        String trimmed = trimTrailingOperator(source);
-        return trimmed + " " + operatorSymbol + " ";
-    }
-
-    @NonNull
-    private String trimTrailingOperator(String source) {
+    private String trimTrailingOperatorText(String source) {
         String trimmed = source == null ? "" : source.trim();
         if (trimmed.endsWith("=")) {
             trimmed = trimmed.substring(0, trimmed.length() - 1).trim();
@@ -305,11 +326,38 @@ public final class CalculatorEngine {
     }
 
     @NonNull
-    private String trimLastCharacter(String source) {
-        if (source == null || source.isEmpty()) {
+    private String buildExpressionText() {
+        if (mOperands.isEmpty() && mOperators.isEmpty() && mCurrentInput.isEmpty()) {
             return "";
         }
-        return source.substring(0, source.length() - 1);
+
+        StringBuilder builder = new StringBuilder();
+
+        for (int index = 0; index < mOperands.size(); index++) {
+            if (builder.length() > 0) {
+                builder.append(' ');
+            }
+            builder.append(stripTrailingZeros(mOperands.get(index)));
+
+            if (index < mOperators.size()) {
+                builder.append(' ')
+                        .append(mOperators.get(index).getSymbol())
+                        .append(' ');
+            }
+        }
+
+        if (!mCurrentInput.isEmpty()) {
+            if (builder.length() > 0 && builder.charAt(builder.length() - 1) != ' ') {
+                builder.append(' ');
+            }
+            builder.append(mCurrentInput);
+        }
+
+        return builder.toString();
+    }
+
+    private void refreshExpressionText() {
+        mExpressionText = buildExpressionText();
     }
 
     private String stripTrailingZeros(@NonNull BigDecimal value) {

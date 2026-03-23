@@ -12,10 +12,10 @@ public class CalculatorEngineTest {
     public void evaluatesSimpleAddition() {
         CalculatorEngine engine = new CalculatorEngine();
 
-        engine.dispatch(CalculatorAction.digit(1));
-        engine.dispatch(CalculatorAction.operator(Operator.ADD));
-        engine.dispatch(CalculatorAction.digit(2));
-        CalculatorUiState state = engine.dispatch(CalculatorAction.equalsAction());
+        engine.applyAction(CalculatorAction.digit(1));
+        engine.applyAction(CalculatorAction.operator(Operator.ADD));
+        engine.applyAction(CalculatorAction.digit(2));
+        CalculatorUiState state = engine.applyAction(CalculatorAction.equalsAction());
 
         assertEquals("3", state.getDisplayText());
     }
@@ -24,12 +24,12 @@ public class CalculatorEngineTest {
     public void respectsOperatorPrecedence() {
         CalculatorEngine engine = new CalculatorEngine();
 
-        engine.dispatch(CalculatorAction.digit(2));
-        engine.dispatch(CalculatorAction.operator(Operator.ADD));
-        engine.dispatch(CalculatorAction.digit(3));
-        engine.dispatch(CalculatorAction.operator(Operator.MULTIPLY));
-        engine.dispatch(CalculatorAction.digit(4));
-        CalculatorUiState state = engine.dispatch(CalculatorAction.equalsAction());
+        engine.applyAction(CalculatorAction.digit(2));
+        engine.applyAction(CalculatorAction.operator(Operator.ADD));
+        engine.applyAction(CalculatorAction.digit(3));
+        engine.applyAction(CalculatorAction.operator(Operator.MULTIPLY));
+        engine.applyAction(CalculatorAction.digit(4));
+        CalculatorUiState state = engine.applyAction(CalculatorAction.equalsAction());
 
         assertEquals("14", state.getDisplayText());
     }
@@ -38,11 +38,11 @@ public class CalculatorEngineTest {
     public void supportsDecimalInputAndPrecisionAdjustments() {
         CalculatorEngine engine = new CalculatorEngine();
 
-        engine.dispatch(CalculatorAction.digit(1));
-        engine.dispatch(CalculatorAction.operator(Operator.DIVIDE));
-        engine.dispatch(CalculatorAction.digit(3));
-        engine.dispatch(CalculatorAction.equalsAction());
-        CalculatorUiState increased = engine.dispatch(CalculatorAction.precisionUp());
+        engine.applyAction(CalculatorAction.digit(1));
+        engine.applyAction(CalculatorAction.operator(Operator.DIVIDE));
+        engine.applyAction(CalculatorAction.digit(3));
+        engine.applyAction(CalculatorAction.equalsAction());
+        CalculatorUiState increased = engine.applyAction(CalculatorAction.precisionUp());
 
         assertEquals("0.333", increased.getDisplayText());
         assertTrue(increased.canDecreasePrecision());
@@ -53,9 +53,9 @@ public class CalculatorEngineTest {
     public void ignoresRepeatedDecimalInput() {
         CalculatorEngine engine = new CalculatorEngine();
 
-        engine.dispatch(CalculatorAction.decimal());
-        engine.dispatch(CalculatorAction.digit(5));
-        CalculatorUiState state = engine.dispatch(CalculatorAction.decimal());
+        engine.applyAction(CalculatorAction.decimal());
+        engine.applyAction(CalculatorAction.digit(5));
+        CalculatorUiState state = engine.applyAction(CalculatorAction.decimal());
 
         assertEquals("0.5", state.getDisplayText());
         assertFalse(state.canInputDecimal());
@@ -65,9 +65,9 @@ public class CalculatorEngineTest {
     public void replacesTrailingOperator() {
         CalculatorEngine engine = new CalculatorEngine();
 
-        engine.dispatch(CalculatorAction.digit(8));
-        engine.dispatch(CalculatorAction.operator(Operator.ADD));
-        CalculatorUiState state = engine.dispatch(CalculatorAction.operator(Operator.SUBTRACT));
+        engine.applyAction(CalculatorAction.digit(8));
+        engine.applyAction(CalculatorAction.operator(Operator.ADD));
+        CalculatorUiState state = engine.applyAction(CalculatorAction.operator(Operator.SUBTRACT));
 
         assertEquals("8 - ", state.getExpressionText());
     }
@@ -76,40 +76,112 @@ public class CalculatorEngineTest {
     public void clearsAndStartsANewExpressionAfterEquals() {
         CalculatorEngine engine = new CalculatorEngine();
 
-        engine.dispatch(CalculatorAction.digit(1));
-        engine.dispatch(CalculatorAction.operator(Operator.ADD));
-        engine.dispatch(CalculatorAction.digit(2));
-        engine.dispatch(CalculatorAction.equalsAction());
-        CalculatorUiState state = engine.dispatch(CalculatorAction.digit(7));
+        engine.applyAction(CalculatorAction.digit(1));
+        engine.applyAction(CalculatorAction.operator(Operator.ADD));
+        engine.applyAction(CalculatorAction.digit(2));
+        engine.applyAction(CalculatorAction.equalsAction());
+        CalculatorUiState state = engine.applyAction(CalculatorAction.digit(7));
 
         assertEquals("7", state.getDisplayText());
         assertEquals("7", state.getExpressionText());
     }
 
     @Test
+    public void continuesUsingReadyResultWhenOperatorIsTappedAfterEquals() {
+        CalculatorEngine engine = new CalculatorEngine();
+
+        engine.applyAction(CalculatorAction.digit(1));
+        engine.applyAction(CalculatorAction.operator(Operator.ADD));
+        engine.applyAction(CalculatorAction.digit(2));
+        engine.applyAction(CalculatorAction.equalsAction());
+        CalculatorUiState state = engine.applyAction(CalculatorAction.operator(Operator.MULTIPLY));
+
+        assertEquals("3", state.getDisplayText());
+        assertEquals("3 × ", state.getExpressionText());
+    }
+
+    @Test
     public void showsErrorWhenDividingByZero() {
         CalculatorEngine engine = new CalculatorEngine();
 
-        engine.dispatch(CalculatorAction.digit(8));
-        engine.dispatch(CalculatorAction.operator(Operator.DIVIDE));
-        engine.dispatch(CalculatorAction.digit(0));
-        CalculatorUiState state = engine.dispatch(CalculatorAction.equalsAction());
+        engine.applyAction(CalculatorAction.digit(8));
+        engine.applyAction(CalculatorAction.operator(Operator.DIVIDE));
+        engine.applyAction(CalculatorAction.digit(0));
+        CalculatorUiState state = engine.applyAction(CalculatorAction.equalsAction());
 
         assertEquals("無法除以 0", state.getDisplayText());
         assertTrue(state.isShowingError());
     }
 
     @Test
+    public void resetsErrorStateWhenDigitIsEntered() {
+        CalculatorEngine engine = new CalculatorEngine();
+
+        engine.applyAction(CalculatorAction.digit(8));
+        engine.applyAction(CalculatorAction.operator(Operator.DIVIDE));
+        engine.applyAction(CalculatorAction.digit(0));
+        engine.applyAction(CalculatorAction.equalsAction());
+        CalculatorUiState state = engine.applyAction(CalculatorAction.digit(7));
+
+        assertEquals("7", state.getDisplayText());
+        assertEquals("7", state.getExpressionText());
+        assertFalse(state.isShowingError());
+    }
+
+    @Test
     public void deletesLastDigitOrOperator() {
         CalculatorEngine engine = new CalculatorEngine();
 
-        engine.dispatch(CalculatorAction.digit(1));
-        engine.dispatch(CalculatorAction.digit(2));
-        CalculatorUiState digitDeletedState = engine.dispatch(CalculatorAction.delete());
+        engine.applyAction(CalculatorAction.digit(1));
+        engine.applyAction(CalculatorAction.digit(2));
+        CalculatorUiState digitDeletedState = engine.applyAction(CalculatorAction.delete());
         assertEquals("1", digitDeletedState.getDisplayText());
 
-        engine.dispatch(CalculatorAction.operator(Operator.ADD));
-        CalculatorUiState operatorDeletedState = engine.dispatch(CalculatorAction.delete());
+        engine.applyAction(CalculatorAction.operator(Operator.ADD));
+        CalculatorUiState operatorDeletedState = engine.applyAction(CalculatorAction.delete());
         assertEquals("1", operatorDeletedState.getExpressionText());
+    }
+
+    @Test
+    public void restoresFullExpressionWhenDeletingTrailingOperator() {
+        CalculatorEngine engine = new CalculatorEngine();
+
+        engine.applyAction(CalculatorAction.digit(6));
+        engine.applyAction(CalculatorAction.digit(6));
+        engine.applyAction(CalculatorAction.digit(6));
+        engine.applyAction(CalculatorAction.digit(6));
+        engine.applyAction(CalculatorAction.operator(Operator.ADD));
+        engine.applyAction(CalculatorAction.digit(9));
+        engine.applyAction(CalculatorAction.digit(9));
+        engine.applyAction(CalculatorAction.digit(9));
+        engine.applyAction(CalculatorAction.digit(9));
+        engine.applyAction(CalculatorAction.decimal());
+        engine.applyAction(CalculatorAction.digit(8));
+        engine.applyAction(CalculatorAction.digit(8));
+        engine.applyAction(CalculatorAction.digit(8));
+        engine.applyAction(CalculatorAction.operator(Operator.MULTIPLY));
+        engine.applyAction(CalculatorAction.digit(7));
+        engine.applyAction(CalculatorAction.digit(7));
+        engine.applyAction(CalculatorAction.digit(7));
+
+        engine.applyAction(CalculatorAction.delete());
+        engine.applyAction(CalculatorAction.delete());
+        engine.applyAction(CalculatorAction.delete());
+
+        CalculatorUiState state = engine.applyAction(CalculatorAction.delete());
+
+        assertEquals("9999.888", state.getDisplayText());
+        assertEquals("6666 + 9999.888", state.getExpressionText());
+    }
+
+    @Test
+    public void keepsTrailingOperatorVisibleAfterReplacingIt() {
+        CalculatorEngine engine = new CalculatorEngine();
+
+        engine.applyAction(CalculatorAction.digit(1));
+        engine.applyAction(CalculatorAction.operator(Operator.ADD));
+        CalculatorUiState state = engine.applyAction(CalculatorAction.operator(Operator.MULTIPLY));
+
+        assertEquals("1 × ", state.getExpressionText());
     }
 }
